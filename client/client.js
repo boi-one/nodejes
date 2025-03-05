@@ -5,12 +5,6 @@ const sendButton = document.getElementById('send');
 
 const serverLocation = 'http://localhost:3000';
 
-function sendMessage()
-{
-    console.log("send message");
-    
-}
-
 async function getInfo(e)
 {
     e.preventDefault();
@@ -24,17 +18,29 @@ async function getInfo(e)
 
 async function postInfo(e)
 {
-    
+    e.preventDefault();
+    if(inputfield.value === '') {return};
+    const res = await fetch(serverLocation,
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type" : 'application/json'
+            },
+            body: JSON.stringify({
+                parcel: inputfield.value
+            })
+        }
+    )
 }
 
-document.addEventListener('click', getInfo);
+document.addEventListener('click', (event) => postInfo(event));
 
-document.addEventListener("keypress", (event) => 
+document.addEventListener("keydown", (event) => 
 {
     if(event.key == 'Enter')
     {
-        sendMessage();
-        getInfo();
+        getInfo(event);
+        postInfo(event);
+        inputfield.value = "";
     }
-        
 });
